@@ -1,6 +1,7 @@
 .global-lit {
     background-color: #F5A92B;
     height: 100vh;
+    cursor: url("crosshair.png") 15 15, auto
 }
 
 .global-regular {
