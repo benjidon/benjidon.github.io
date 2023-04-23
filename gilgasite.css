@@ -7,6 +7,9 @@
 .global-regular {
     background: rgb(250,238,219);
     background: linear-gradient(325deg, rgba(250,238,219,1) 0%, rgba(225,231,231,1) 51%, rgba(242,241,241,1) 100%);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    height: 100%;
 }
 
 .header-font {
