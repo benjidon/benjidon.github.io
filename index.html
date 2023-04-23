@@ -11,10 +11,13 @@
 <body id="body-root" class="global-regular">
     <!-- Rounded Switch -->
     <div style="position:fixed; right:50px; top: 50px;">
-        <label id="page-switch" class="switch">
-            <input type="checkbox" onclick="switchitup(this)">
-            <span class="slider round"></span>
-        </label>
+        <div style="display: flex; flex-direction: row;">
+            <div id="try-me" class="body-header-font" style="margin-right: 20px; margin-top: 3px; color: red">Try Me -></div>
+            <label id="page-switch" class="switch">
+                <input type="checkbox" onclick="switchitup(this)">
+                <span class="slider round"></span>
+            </label>
+        </div>
     </div>
     <!-- Regular Page -->
     <div class="body-content">
@@ -31,6 +34,18 @@
             </div>
             <img id="headshot" src="headshot.png"
                 style="border-radius: 50%; width: 180px; height: 200px; text-align: center; left: calc(50% - 90px); position: relative; top: 10px;">
+
+            <div id="bug-attack" style="margin-top: 20px; display: none">
+                <div class="body-header-font body-header-section">
+                    <div name="buggable" style="display: inline-block; color: red">
+                        Bug Attack
+                    </div>
+                </div>
+                <div class="body-font body-section-content">
+                    <div style="display: inline-block" name="buggable">
+                        Click around to fight off the production bugs!!</div>
+                </div>
+            </div>
             <!-- Section 1 -->
             <div id="section-1" style="margin-top: 20px">
                 <div class="body-header-font body-header-section">
@@ -40,13 +55,18 @@
                 </div>
                 <div class="body-font body-section-content">
                     <div style="display: inline-block" name="buggable">
-                    As an experienced web developer with a passion for innovation and creativity, I'm excited to potentially bring my talents to Gilga.  With my expertise, I can help launch Gilga's online platform
-                    and make it an immersive and engaging experience.  I have a strong background in both front-end and back-end development, and am confident that I can deliver an interface that reflects Gilga's creative
-                    vision.  I'm excited for the opportunity to work with Donald's team, and to make a lasting impact on the world of digital media.</div>
+                        As an experienced web developer with a passion for innovation and creativity, I'm excited to
+                        potentially bring my talents to Gilga. With my expertise, I can help launch Gilga's online
+                        platform
+                        and make it an immersive and engaging experience. I have a strong background in both front-end
+                        and back-end development, and am confident that I can deliver an interface that reflects Gilga's
+                        creative
+                        vision. I'm excited for the opportunity to work with Donald's team, and to make a lasting impact
+                        on the world of digital media.</div>
                 </div>
             </div>
             <!-- Section 2 -->
-            <div id="section-1" style="margin-top: 20px">
+            <div id="section-2" style="margin-top: 20px">
                 <div class="body-header-font body-header-section">
                     <div name="buggable" style="display: inline-block">
                         Education
@@ -66,7 +86,7 @@
                 </div>
             </div>
             <!-- Section 3 -->
-            <div id="section-2" style="margin-top: 40px;">
+            <div id="section-3" style="margin-top: 40px;">
                 <div class="body-header-font body-header-section">
                     <div name="buggable" style="display: inline-block">Experience</div>
 
@@ -112,19 +132,6 @@
             </div>
         </div>
 
-
-        <!-- Lit Page -->
-        <div id="lit-page" style="display: none;">
-            <div style="text-align: center;">
-                <div class="header-font">
-                    Benjamin Don
-                </div>
-                <div class="body-font subheader" style="font-style: italic;">
-                    "Making your UI doper"
-                </div>
-            </div>
-
-        </div>
     </div>
 </body>
 

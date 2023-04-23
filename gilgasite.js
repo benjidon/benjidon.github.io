@@ -30,6 +30,8 @@ function handleChecked() {
     })
     document.getElementById("toggle-sound").play()
     document.getElementById('body-root').style.userSelect = "none"
+    document.getElementById("try-me").style.display = "none"
+    document.getElementById("bug-attack").style.display = "block"
     gameLoop();
 }
 
@@ -42,6 +44,7 @@ function handleUnchecked() {
         document.getElementById(bug.id).style.display = "none"
     })
     document.getElementById('body-root').style.userSelect = "auto"
+    document.getElementById("bug-attack").style.display = "none"
     cleanup()
 }
 
@@ -60,7 +63,7 @@ function cleanup() {
 function isOutOfBounds(element) {
     if (element) {
         const boundBox = element.getBoundingClientRect();
-        if (boundBox.bottom < -500 || boundBox.left > window.innerWidth + 1000 || boundBox.top > window.innerHeight + 1000 || boundBox.right < -1000) {
+        if (boundBox.bottom < -1000 || boundBox.left > window.innerWidth + 1000 || boundBox.top > window.innerHeight + 1000 || boundBox.right < -1000) {
             return true;
         }
         return false;
