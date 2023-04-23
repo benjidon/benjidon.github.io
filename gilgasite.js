@@ -15,6 +15,7 @@ let bugSpeed = 1.2;
 // finish resume
 
 
+
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
 }
