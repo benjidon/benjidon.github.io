@@ -92,6 +92,9 @@ function handleOranges() {
                 oranges.splice(index, 1)
                 bugElement.remove();
                 bugs.splice(i, 1)
+                if (bug.attached !== undefined) {
+                    buggableCollided[bug.attached] = undefined;
+                }
                 document.getElementById("hit-bug").volume = 0.6
                 document.getElementById("hit-bug").play()
             }
