@@ -11,11 +11,6 @@ let buggableCollided = {};
 let lastAddedOrange = Date.now()
 
 
-// TODO 
-// finish resume
-
-
-
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
 }
@@ -34,6 +29,7 @@ function handleChecked() {
         document.getElementById(bug.id).style.display = "inline"
     })
     document.getElementById("toggle-sound").play()
+    document.getElementById('body-root').style.userSelect = "none"
     gameLoop();
 }
 
@@ -45,6 +41,7 @@ function handleUnchecked() {
     bugs.forEach(bug => {
         document.getElementById(bug.id).style.display = "none"
     })
+    document.getElementById('body-root').style.userSelect = "auto"
     cleanup()
 }
 
