@@ -63,7 +63,7 @@ function cleanup() {
 function isOutOfBounds(element) {
     if (element) {
         const boundBox = element.getBoundingClientRect();
-        if (boundBox.bottom < -1000 || boundBox.left > window.innerWidth + 1000 || boundBox.top > window.innerHeight + 1000 || boundBox.right < -1000) {
+        if (boundBox.bottom < -2000 || boundBox.left > window.innerWidth + 2000 || boundBox.top > window.innerHeight + 1000 || boundBox.right < -1000) {
             return true;
         }
         return false;
