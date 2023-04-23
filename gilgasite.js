@@ -4,8 +4,8 @@ let bugs = []
 let startPos = { x: 954, y: 244 }
 let nextOrange = 0;
 let nextBug = 0;
-let speed = 4
-let bugSpeed = 1.2;
+let speed = 15
+let bugSpeed = 2;
 let buggables = [];
 let buggableCollided = {};
 let lastAddedOrange = Date.now()
@@ -81,7 +81,7 @@ function detectCollision(bb1, bb2) {
         bb1.y <= bb2.y + bb2Height);
 }
 
-function handleOranges() {
+function handleOranges(dt) {
     oranges.forEach((orange, index) => {
         let orangeElement = document.getElementById(orange.id)
         for (let i = 0; i < bugs.length; i++) {
@@ -103,15 +103,15 @@ function handleOranges() {
             orangeElement.remove();
             oranges.splice(index, 1)
         } else {
-            orange.position.x += orange.dir.x * speed
-            orange.position.y += orange.dir.y * speed
+            orange.position.x += orange.dir.x * speed * dt
+            orange.position.y += orange.dir.y * speed * dt
             orangeElement.style.left = (orange.position.x - 25).toString() + "px"
             orangeElement.style.top = (orange.position.y - 25).toString() + "px"
         }
     })
 }
 
-function handleBugs() {
+function handleBugs(dt) {
     bugs.forEach((bug, index) => {
         let bugElement = document.getElementById(bug.id)
 
@@ -140,15 +140,15 @@ function handleBugs() {
                     bug.inBounds = true;
                 }
             }
-            bug.position.x += bug.dir.x * bugSpeed
-            bug.position.y += bug.dir.y * bugSpeed
+            bug.position.x += bug.dir.x * bugSpeed * dt
+            bug.position.y += bug.dir.y * bugSpeed * dt
             
             bugElement.style.left = (bug.position.x - 25).toString() + "px"
             bugElement.style.top = (bug.position.y - 25).toString() + "px"
             if (bug.attached !== undefined) {
                 let boundBox = buggables[bug.attached].getBoundingClientRect();
-                buggables[bug.attached].style.left = (boundBox.left + (bug.dir.x * bugSpeed)).toString() + "px"
-                buggables[bug.attached].style.top = (boundBox.top + (bug.dir.y * bugSpeed)).toString() + "px"
+                buggables[bug.attached].style.left = (boundBox.left + (bug.dir.x * bugSpeed * dt)).toString() + "px"
+                buggables[bug.attached].style.top = (boundBox.top + (bug.dir.y * bugSpeed * dt)).toString() + "px"
             }
         }
     })
@@ -156,14 +156,21 @@ function handleBugs() {
 
 async function gameLoop() {
     let bugTimer = 0;
+    let gameTimer = new Date().getTime();
     while (page) {
-        handleOranges()
-        handleBugs()
+        let currTime = new Date().getTime() / 10;
+        let dt = (currTime - gameTimer) 
+        handleOranges(dt)
+        handleBugs(dt)
         bugTimer += 10;
         if (bugTimer % 2500 === 0) {
             addBug()
+            if (bugTimer > 10000) {
+                addBug()
+            }
         }
         await sleep(0.5)
+        gameTimer = currTime;
     }
 }
 
