@@ -163,11 +163,8 @@ async function gameLoop() {
         handleOranges(dt)
         handleBugs(dt)
         bugTimer += 10;
-        if (bugTimer % 2500 === 0) {
+        if (bugTimer % 5000 === 0) {
             addBug()
-            if (bugTimer > 10000) {
-                addBug()
-            }
         }
         await sleep(0.5)
         gameTimer = currTime;
