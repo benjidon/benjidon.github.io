@@ -158,11 +158,11 @@ async function gameLoop() {
     let bugTimer = 0;
     let gameTimer = new Date().getTime();
     while (page) {
-        let currTime = new Date().getTime() / 10;
-        let dt = (currTime - gameTimer) 
+        let currTime = new Date().getTime();
+        let dt = (currTime - gameTimer) / 10
         handleOranges(dt)
         handleBugs(dt)
-        bugTimer += 10;
+        bugTimer += dt;
         if (bugTimer % 5000 === 0) {
             addBug()
         }
