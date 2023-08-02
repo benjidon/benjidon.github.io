@@ -164,7 +164,7 @@ async function gameLoop() {
         handleBugs(dt)
         bugTimer += dt;
         if (bugTimer % 5000 === 0) {
-            addBug()
+            // addBug()
         }
         await sleep(0.5)
         gameTimer = currTime;
