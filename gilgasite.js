@@ -2,13 +2,14 @@ let page = 0;
 let oranges = []
 let bugs = []
 let startPos = { x: 954, y: 244 }
-let nextOrange = 0;
-let nextBug = 0;
-let speed = 15
-let bugSpeed = 2;
+let nextOrange = 0
+let nextBug = 0
+let speed = 20
+let bugSpeed = 2
 let buggables = [];
 let buggableCollided = {};
 let lastAddedOrange = Date.now()
+let addBugTime = 300
 
 
 function switchitup(toggle) {
@@ -156,6 +157,7 @@ function handleBugs(dt) {
 
 async function gameLoop() {
     let bugTimer = 0;
+    let overallTime = 0;
     let gameTimer = new Date().getTime();
     while (page) {
         let currTime = new Date().getTime();
@@ -163,8 +165,13 @@ async function gameLoop() {
         handleOranges(dt)
         handleBugs(dt)
         bugTimer += dt;
-        if (bugTimer % 5000 === 0) {
-            // addBug()
+        overallTime += dt;
+        if (bugTimer > addBugTime) {
+            addBug()
+            bugTimer = 0
+        }
+        if (overallTime > 1000 && addBugTime > 150) {
+            addBugTime *= 0.5
         }
         await sleep(0.5)
         gameTimer = currTime;
