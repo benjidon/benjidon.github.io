@@ -1,7 +1,15 @@
+/* Disable zoom and double-tap behaviors on mobile */
+* {
+    touch-action: manipulation;
+}
+
 .global-lit {
     background-color: #F5A92B;
     height: 100vh;
-    cursor: url("crosshair.png") 15 15, auto
+    cursor: url("crosshair.png") 15 15, auto;
+    touch-action: manipulation;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
 }
 
 .global-regular {

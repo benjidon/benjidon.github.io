@@ -4,7 +4,7 @@ let bugs = []
 let startPos = { x: 954, y: 244 }
 let nextOrange = 0
 let nextBug = 0
-let speed = 20
+let speed = 25
 let bugSpeed = 2
 let buggables = [];
 let buggableCollided = {};
@@ -24,7 +24,11 @@ function handleChecked() {
     let headshoutBounds = document.getElementById("headshot").getBoundingClientRect();
     let width = headshoutBounds.right - headshoutBounds.left;
     let height = headshoutBounds.bottom - headshoutBounds.top;
-    startPos = {x: headshoutBounds.left + Math.floor(width / 2), y: headshoutBounds.top + Math.floor(height / 2)}
+    // Keep in viewport coordinates since we're using position: fixed
+    startPos = {
+        x: headshoutBounds.left + Math.floor(width / 2), 
+        y: headshoutBounds.top + Math.floor(height / 2)
+    }
     buggables = document.getElementsByName("buggable")
     bugs.forEach(bug => {
         document.getElementById(bug.id).style.display = "inline"
@@ -224,21 +228,40 @@ function addBug() {
     bugElement.style = "position: fixed;"
     bugElement.style.left = bug.position.x.toString() + "px";
     bugElement.style.top = bug.position.y.toString() + "px";
-    bugElement.style.transform = "translate(-50%. -50%)"
+    bugElement.style.transform = "translate(-50%, -50%)"
     bugElement.style.userSelect = "none"
     bugElement.id = bug.id
     document.body.append(bugElement)
     nextBug += 1;
 }
 
-window.addEventListener('click', function (event) {
+function updateStartPos() {
+    if (page) {
+        let headshoutBounds = document.getElementById("headshot").getBoundingClientRect();
+        let width = headshoutBounds.right - headshoutBounds.left;
+        let height = headshoutBounds.bottom - headshoutBounds.top;
+        // Keep in viewport coordinates since we're using position: fixed
+        startPos = {
+            x: headshoutBounds.left + Math.floor(width / 2), 
+            y: headshoutBounds.top + Math.floor(height / 2)
+        }
+    }
+}
+
+// Update start position when scrolling
+window.addEventListener('scroll', updateStartPos);
+
+window.addEventListener('mousedown', function (event) {
     const parent = event.target.parentElement;
     if (parent && parent.id === "page-switch") {
         return;
     }
-    if (page && Date.now() - lastAddedOrange > 300) {
-        let dirX = event.pageX - startPos.x
-        let dirY = event.pageY - startPos.y
+    if (page && Date.now() - lastAddedOrange > 50) {
+        // Update start position to ensure accuracy
+        updateStartPos();
+        
+        let dirX = event.clientX - startPos.x
+        let dirY = event.clientY - startPos.y
         let magnitude = Math.sqrt((dirX * dirX) + (dirY * dirY))
         let dirVector = { x: dirX / magnitude, y: dirY / magnitude }
         let newOrangeId = "orange_" + nextOrange.toString()
@@ -248,9 +271,8 @@ window.addEventListener('click', function (event) {
         orangeElement.src = "orange_art_2.png"
         orangeElement.id = newOrangeId
         orangeElement.style = "position: fixed;"
-        orangeElement.style.left = startPos.x.toString() + "px";
-        orangeElement.style.top = startPos.y.toString() + "px";
-        orangeElement.style.transform = "translate(-50%. -50%)"
+        orangeElement.style.left = (startPos.x - 25).toString() + "px";
+        orangeElement.style.top = (startPos.y - 25).toString() + "px";
         orangeElement.style.userSelect = "none"
         document.body.appendChild(orangeElement)
         document.getElementById("shoot-orange").volume = 0.6
