@@ -177,7 +177,9 @@ async function gameLoop() {
         if (overallTime > 1000 && addBugTime > 150) {
             addBugTime *= 0.5
         }
-        await sleep(0.5)
+        // Use longer sleep on mobile for better performance
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        await sleep(isMobile ? 8 : 0.5)
         gameTimer = currTime;
     }
 }
@@ -251,17 +253,33 @@ function updateStartPos() {
 // Update start position when scrolling
 window.addEventListener('scroll', updateStartPos);
 
-window.addEventListener('mousedown', function (event) {
+function handleShoot(event) {
     const parent = event.target.parentElement;
     if (parent && parent.id === "page-switch") {
         return;
     }
-    if (page && Date.now() - lastAddedOrange > 50) {
+    // Faster shooting on mobile to compensate for lower frame rate
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const shootCooldown = isMobile ? 100 : 50;
+    if (page && Date.now() - lastAddedOrange > shootCooldown) {
+        // Prevent default touch behaviors
+        event.preventDefault();
+        
         // Update start position to ensure accuracy
         updateStartPos();
         
-        let dirX = event.clientX - startPos.x
-        let dirY = event.clientY - startPos.y
+        // Get coordinates from touch or mouse event
+        let clientX, clientY;
+        if (event.touches && event.touches.length > 0) {
+            clientX = event.touches[0].clientX;
+            clientY = event.touches[0].clientY;
+        } else {
+            clientX = event.clientX;
+            clientY = event.clientY;
+        }
+        
+        let dirX = clientX - startPos.x
+        let dirY = clientY - startPos.y
         let magnitude = Math.sqrt((dirX * dirX) + (dirY * dirY))
         let dirVector = { x: dirX / magnitude, y: dirY / magnitude }
         let newOrangeId = "orange_" + nextOrange.toString()
@@ -281,4 +299,8 @@ window.addEventListener('mousedown', function (event) {
         nextOrange += 1;
         lastAddedOrange = Date.now()
     }
-})
+}
+
+// Add both mouse and touch event listeners
+window.addEventListener('mousedown', handleShoot);
+window.addEventListener('touchstart', handleShoot, { passive: false });
