@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="gilgasite.css">
 <script src="gilgasite.js"></script>
 <audio id="theme-song" src="paper_boi_theme.mp3" loop="loop"></audio>
@@ -11,9 +14,11 @@
 
 <body id="body-root" class="global-regular">
     <!-- Rounded Switch -->
-    <div style="position:fixed; right:50px; top: 50px;">
-        <div style="display: flex; flex-direction: row;">
-            <div id="try-me" class="body-header-font" style="margin-right: 20px; margin-top: 3px; color: red">Try Me -></div>
+    <div id="toggle-container" style="position:absolute; right:20px; top: 20px; z-index: 100;">
+        <div style="display: flex; flex-direction: row; align-items: center;">
+            <div id="try-me" class="body-header-font wave-text" style="margin-right: 15px; color: red; white-space: nowrap;">
+                <span>T</span><span>r</span><span>y</span><span>&nbsp;</span><span>M</span><span>e</span><span> </span><span>-</span><span>></span>
+            </div>
             <label id="page-switch" class="switch">
                 <input type="checkbox" onclick="switchitup(this)">
                 <span class="slider round"></span>
