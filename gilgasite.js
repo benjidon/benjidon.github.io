@@ -95,6 +95,19 @@ function cleanup() {
     })
     oranges = [];
     nextOrange = 0;
+    
+    // Reset all buggable elements to their original state
+    if (buggables) {
+        for (let i = 0; i < buggables.length; i++) {
+            if (buggableCollided[i] !== undefined) {
+                buggables[i].style.position = "";
+                buggables[i].style.left = "";
+                buggables[i].style.top = "";
+                buggables[i].style.float = "";
+            }
+        }
+    }
+    buggableCollided = {};
 }
 
 function isOutOfBounds(element) {
@@ -133,6 +146,7 @@ function handleOranges(dt) {
                 bugElement.remove();
                 bugs.splice(i, 1)
                 if (bug.attached !== undefined) {
+                    // Text is already in document coordinates, just leave it in place
                     buggableCollided[bug.attached] = undefined;
                 }
                 // Play hit sound with optimized cached element
@@ -166,9 +180,9 @@ function handleBugs(dt) {
                 let buggablesBound =  buggables[i].getBoundingClientRect();
                 if (detectCollision(bugElement.getBoundingClientRect(), buggablesBound) && buggableCollided[i] === undefined) {
                     bug.attached = i;
-                    buggables[i].style.position = "fixed"
-                    buggables[i].style.left = buggablesBound.x
-                    buggables[i].style.top = buggablesBound.y
+                    buggables[i].style.position = "absolute"
+                    buggables[i].style.left = (buggablesBound.left + window.scrollX) + "px"
+                    buggables[i].style.top = (buggablesBound.top + window.scrollY) + "px"
                     buggables[i].style.float = "none";
                     buggableCollided[i] = true;
                     bug.dir.x = bug.dir.x * -1;
@@ -192,9 +206,10 @@ function handleBugs(dt) {
             bugElement.style.left = (bug.position.x - 25).toString() + "px"
             bugElement.style.top = (bug.position.y - 25).toString() + "px"
             if (bug.attached !== undefined) {
-                let boundBox = buggables[bug.attached].getBoundingClientRect();
-                buggables[bug.attached].style.left = (boundBox.left + (bug.dir.x * mobileBugSpeed * dt)).toString() + "px"
-                buggables[bug.attached].style.top = (boundBox.top + (bug.dir.y * mobileBugSpeed * dt)).toString() + "px"
+                let currentLeft = parseFloat(buggables[bug.attached].style.left);
+                let currentTop = parseFloat(buggables[bug.attached].style.top);
+                buggables[bug.attached].style.left = (currentLeft + (bug.dir.x * mobileBugSpeed * dt)).toString() + "px"
+                buggables[bug.attached].style.top = (currentTop + (bug.dir.y * mobileBugSpeed * dt)).toString() + "px"
             }
         }
     })
@@ -236,28 +251,28 @@ function normalize(vec) {
 
 function addBug() {
     let side = getRandomInt(4);
-    let windowCenter = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
+    let windowCenter = { x: window.innerWidth / 2 + window.scrollX, y: window.innerHeight / 2 + window.scrollY }
     let negativeX = getRandomInt(100) > 50 ? 1 : -1
     let negativeY = getRandomInt(100) > 50 ? 1 : -1
     let bug = {}
     switch (side) {
         case 0: // Top side
-            bug.position = { x: getRandomInt(window.innerWidth), y: -100 }
+            bug.position = { x: getRandomInt(window.innerWidth) + window.scrollX, y: window.scrollY - 100 }
             bug.dir = normalize({ x: (windowCenter.x + getRandomInt(100) * negativeX) - bug.position.x, y: (windowCenter.y + getRandomInt(100) * negativeY) - bug.position.y });
             bugs.push(bug)
             break;
         case 1: // Right side
-            bug.position = { x: window.innerWidth + 100, y: getRandomInt(window.innerHeight) }
+            bug.position = { x: window.innerWidth + window.scrollX + 100, y: getRandomInt(window.innerHeight) + window.scrollY }
             bug.dir = normalize({ x: (windowCenter.x + getRandomInt(100) * negativeX) - bug.position.x, y: (windowCenter.y + getRandomInt(100) * negativeY) - bug.position.y });
             bugs.push(bug)
             break;
         case 2: // Bottom side
-            bug.position = { x: getRandomInt(window.innerWidth), y: window.innerHeight }
+            bug.position = { x: getRandomInt(window.innerWidth) + window.scrollX, y: window.innerHeight + window.scrollY }
             bug.dir = normalize({ x: (windowCenter.x + getRandomInt(100) * negativeX) - bug.position.x, y: (windowCenter.y + getRandomInt(100) * negativeY) - bug.position.y });
             bugs.push(bug)
             break;
         case 3: // Left side
-            bug.position = { x: -100, y: getRandomInt(window.innerHeight) }
+            bug.position = { x: window.scrollX - 100, y: getRandomInt(window.innerHeight) + window.scrollY }
             bug.dir = normalize({ x: (windowCenter.x + getRandomInt(100) * negativeX) - bug.position.x, y: (windowCenter.y + getRandomInt(100) * negativeY) - bug.position.y });
             bugs.push(bug)
             break;
@@ -268,7 +283,7 @@ function addBug() {
     bug.inBounds = false;
     const bugElement = document.createElement("img")
     bugElement.src = "bug_2.png"
-    bugElement.style = "position: fixed;"
+    bugElement.style = "position: absolute;"
     bugElement.style.left = bug.position.x.toString() + "px";
     bugElement.style.top = bug.position.y.toString() + "px";
     bugElement.style.transform = "translate(-50%, -50%)"

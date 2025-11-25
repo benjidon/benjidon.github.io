@@ -10,9 +10,10 @@
 
 .global-lit {
     background-color: #F5A92B;
-    height: 100vh;
+    min-height: 100vh;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+    user-select: none;
 }
 
 .global-lit,
