@@ -15,6 +15,9 @@ let addBugTime = 3000
 let shootSound = null;
 let hitSound = null;
 
+// Bug score tracking
+let bugScore = 0;
+
 
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
@@ -52,6 +55,10 @@ function handleChecked() {
     document.getElementById('body-root').style.userSelect = "none"
     document.getElementById("try-me").style.display = "none"
     document.getElementById("bug-attack").style.display = "block"
+    document.getElementById("bug-score").style.display = "block"
+    
+    // Show current score (don't reset)
+    document.getElementById("score-value").textContent = bugScore;
     
     // Add touch event listener only when game is active
     window.addEventListener('touchstart', handleShoot, { passive: true });
@@ -74,6 +81,7 @@ function handleUnchecked() {
     })
     document.getElementById('body-root').style.userSelect = "auto"
     document.getElementById("bug-attack").style.display = "none"
+    document.getElementById("bug-score").style.display = "none"
     
     // Remove touch event listener when game is inactive
     window.removeEventListener('touchstart', handleShoot);
@@ -149,6 +157,11 @@ function handleOranges(dt) {
                     // Text is already in document coordinates, just leave it in place
                     buggableCollided[bug.attached] = undefined;
                 }
+                
+                // Update bug score
+                bugScore++;
+                document.getElementById("score-value").textContent = bugScore;
+                
                 // Play hit sound with optimized cached element
                 if (hitSound) {
                     hitSound.currentTime = 0; // Reset to start for rapid fire
