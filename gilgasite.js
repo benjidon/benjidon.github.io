@@ -11,6 +11,10 @@ let buggableCollided = {};
 let lastAddedOrange = Date.now()
 let addBugTime = 300
 
+// Pre-cache audio elements for better performance
+let shootSound = null;
+let hitSound = null;
+
 
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
@@ -23,6 +27,12 @@ function handleChecked() {
     // Force crosshair cursor on all elements
     document.documentElement.style.cursor = "url('crosshair.png') 15 15, auto";
     document.body.style.cursor = "url('crosshair.png') 15 15, auto";
+    
+    // Pre-cache and configure audio elements
+    shootSound = document.getElementById("shoot-orange");
+    hitSound = document.getElementById("hit-bug");
+    shootSound.volume = 0.6;
+    hitSound.volume = 0.6;
     
     document.getElementById("theme-song").play()
     document.getElementById("headshot").src = "headshot_deepfried.jpg"
@@ -68,6 +78,10 @@ function handleUnchecked() {
     // Remove touch event listener when game is inactive
     window.removeEventListener('touchstart', handleShoot);
     
+    // Clear audio cache
+    shootSound = null;
+    hitSound = null;
+    
     cleanup()
 }
 
@@ -106,7 +120,7 @@ function detectCollision(bb1, bb2) {
 
 function handleOranges(dt) {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const orangeSpeed = isMobile ? speed * 0.6 : speed; // Slower on mobile
+    const orangeSpeed = isMobile ? speed * 0.75 : speed; // Slightly slower on mobile
     
     oranges.forEach((orange, index) => {
         let orangeElement = document.getElementById(orange.id)
@@ -121,8 +135,11 @@ function handleOranges(dt) {
                 if (bug.attached !== undefined) {
                     buggableCollided[bug.attached] = undefined;
                 }
-                document.getElementById("hit-bug").volume = 0.6
-                document.getElementById("hit-bug").play()
+                // Play hit sound with optimized cached element
+                if (hitSound) {
+                    hitSound.currentTime = 0; // Reset to start for rapid fire
+                    hitSound.play().catch(() => {}); // Ignore play errors
+                }
             }
         }
         if (isOutOfBounds(orangeElement)) {
@@ -139,7 +156,7 @@ function handleOranges(dt) {
 
 function handleBugs(dt) {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const mobileBugSpeed = isMobile ? bugSpeed * 0.5 : bugSpeed; // Slower on mobile
+    const mobileBugSpeed = isMobile ? bugSpeed * 0.7 : bugSpeed; // Slightly slower on mobile
     
     bugs.forEach((bug, index) => {
         let bugElement = document.getElementById(bug.id)
@@ -203,7 +220,7 @@ async function gameLoop() {
         }
         // Use longer sleep on mobile for better performance
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        await sleep(isMobile ? 16 : 8)
+        await sleep(isMobile ? 12 : 6)
         gameTimer = currTime;
     }
 }
@@ -323,9 +340,11 @@ function handleShoot(event) {
         orangeElement.style.top = (startPos.y - 25).toString() + "px";
         orangeElement.style.userSelect = "none"
         document.body.appendChild(orangeElement)
-        document.getElementById("shoot-orange").volume = 0.6
-        document.getElementById("shoot-orange").load()
-        document.getElementById("shoot-orange").play()
+        // Play shoot sound with optimized cached element
+        if (shootSound) {
+            shootSound.currentTime = 0; // Reset to start for rapid fire
+            shootSound.play().catch(() => {}); // Ignore play errors
+        }
         nextOrange += 1;
         lastAddedOrange = Date.now()
     }
