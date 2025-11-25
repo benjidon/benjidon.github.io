@@ -189,7 +189,7 @@ async function gameLoop() {
         }
         // Use longer sleep on mobile for better performance
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-        await sleep(isMobile ? 8 : 0.5)
+        await sleep(isMobile ? 16 : 8)
         gameTimer = currTime;
     }
 }
@@ -268,9 +268,9 @@ function handleShoot(event) {
     if (parent && parent.id === "page-switch") {
         return;
     }
-    // Faster shooting on mobile to compensate for lower frame rate
+    // Slower shooting on mobile to reduce performance load
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-    const shootCooldown = isMobile ? 100 : 50;
+    const shootCooldown = isMobile ? 150 : 50;
     if (page && Date.now() - lastAddedOrange > shootCooldown) {
         // Prevent default touch behaviors
         event.preventDefault();
