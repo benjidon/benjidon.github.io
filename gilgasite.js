@@ -9,7 +9,7 @@ let bugSpeed = 2
 let buggables = [];
 let buggableCollided = {};
 let lastAddedOrange = Date.now()
-let addBugTime = 300
+let addBugTime = 3000
 
 // Pre-cache audio elements for better performance
 let shootSound = null;
@@ -218,23 +218,31 @@ function handleBugs(dt) {
 async function gameLoop() {
     let bugTimer = 0;
     let overallTime = 0;
-    let gameTimer = new Date().getTime();
+    let gameTimer = performance.now();
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    
     while (page) {
-        let currTime = new Date().getTime();
-        let dt = (currTime - gameTimer) / 10
+        let currTime = performance.now();
+        let deltaTime = currTime - gameTimer;
+        let dt = deltaTime / 10; // Keep original movement scaling
+        
+        // Cap delta time to prevent huge jumps (e.g., when tab becomes inactive)
+        dt = Math.min(dt, 5);
+        
         handleOranges(dt)
         handleBugs(dt)
-        bugTimer += dt;
-        overallTime += dt;
+        bugTimer += deltaTime; // Use actual milliseconds for timers
+        overallTime += deltaTime;
+        
         if (bugTimer > addBugTime) {
             addBug()
             bugTimer = 0
         }
-        if (overallTime > 1000 && addBugTime > 150) {
-            addBugTime *= 0.5
+        if (overallTime > 5000 && addBugTime > 1500) {
+            addBugTime *= 0.8
         }
+        
         // Use longer sleep on mobile for better performance
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         await sleep(isMobile ? 12 : 6)
         gameTimer = currTime;
     }
