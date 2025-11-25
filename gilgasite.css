@@ -9,11 +9,12 @@
 }
 
 .global-lit {
-    background-color: #F5A92B;
+    background: linear-gradient(135deg, #000000 0%, #1a0033 30%, #330066 60%, #000033 100%);
     min-height: 100vh;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    position: relative;
 }
 
 .global-lit,
@@ -24,9 +25,56 @@
     cursor: url("crosshair.png") 15 15, auto !important;
 }
 
+/* Sharp green text for space theme */
+.global-lit .header-font,
+.global-lit .body-header-font,
+.global-lit .body-font {
+    color: #00ff41 !important;
+}
+
+.global-lit .subheader {
+    color: #00cc33 !important;
+}
+
+/* Green line dividers */
+.global-lit .body-header-section {
+    border-bottom-color: #00ff41 !important;
+}
+
 /* Force crosshair on body when in game mode */
 body.global-lit {
     cursor: url("crosshair.png") 15 15, auto !important;
+}
+
+/* Twinkling stars overlay */
+.global-lit::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(1px 1px at 10% 20%, white, transparent),
+        radial-gradient(1px 1px at 25% 10%, white, transparent),
+        radial-gradient(2px 2px at 40% 30%, white, transparent),
+        radial-gradient(1px 1px at 60% 15%, white, transparent),
+        radial-gradient(1px 1px at 75% 40%, white, transparent),
+        radial-gradient(2px 2px at 85% 25%, white, transparent),
+        radial-gradient(1px 1px at 90% 60%, white, transparent),
+        radial-gradient(1px 1px at 15% 70%, white, transparent),
+        radial-gradient(2px 2px at 35% 80%, white, transparent),
+        radial-gradient(1px 1px at 55% 90%, white, transparent),
+        radial-gradient(1px 1px at 70% 75%, white, transparent),
+        radial-gradient(1px 1px at 95% 85%, white, transparent);
+    pointer-events: none;
+    z-index: 1;
+    animation: twinkle 4s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
 }
 
 /* Force crosshair on html element when in game mode */
@@ -73,6 +121,8 @@ html:has(body.global-lit) {
 .body-content {
     margin: 50px 20% 50px 20%;
     padding-top: 20px; /* Add space for the toggle */
+    position: relative;
+    z-index: 2; /* Above space background */
 }
 
 /* Mobile responsive design */
@@ -138,6 +188,84 @@ html:has(body.global-lit) {
     user-select: none;
     -webkit-tap-highlight-color: transparent;
     outline: none;
+}
+
+/* Bug Score Counter Styling - Sharp 8-bit */
+.score-container {
+    background: rgba(10, 10, 10, 0.9);
+    border: 2px solid #00ff41;
+    border-radius: 0;
+    padding: 8px 12px;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+    min-width: 160px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    z-index: 10; /* Above space background */
+}
+
+.score-bug-icon {
+    width: 20px;
+    height: 20px;
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
+}
+
+.score-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.score-label {
+    display: block;
+    color: #00ff41;
+    font-size: 10px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+}
+
+.score-number {
+    display: block;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 1;
+    font-family: 'Courier New', monospace;
+}
+
+/* Mobile responsive for score - 8-bit style */
+@media screen and (max-width: 768px) {
+    #bug-score {
+        left: 10px !important;
+        top: 10px !important;
+    }
+    
+    .score-container {
+        padding: 6px 8px;
+        min-width: 120px;
+        gap: 6px;
+    }
+    
+    .score-bug-icon {
+        width: 16px;
+        height: 16px;
+    }
+    
+    .score-label {
+        font-size: 8px;
+        letter-spacing: 1px;
+    }
+    
+    .score-number {
+        font-size: 18px;
+    }
 }
 
 /* Wave animation for Try Me text */
