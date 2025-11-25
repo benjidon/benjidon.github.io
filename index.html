@@ -13,6 +13,17 @@
 <html lang="en-US">
 
 <body id="body-root" class="global-regular">
+    <!-- Bug Score Counter -->
+    <div id="bug-score" style="position:absolute; left:20px; top: 20px; z-index: 100; display: none;">
+        <div class="score-container">
+            <img src="bug_2.png" alt="Bug" class="score-bug-icon">
+            <div class="score-text">
+                <span class="score-label">SQUASHED</span>
+                <span class="score-number" id="score-value">0</span>
+            </div>
+        </div>
+    </div>
+    
     <!-- Rounded Switch -->
     <div id="toggle-container" style="position:absolute; right:20px; top: 20px; z-index: 100;">
         <div style="display: flex; flex-direction: row; align-items: center;">
