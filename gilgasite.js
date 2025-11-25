@@ -19,6 +19,11 @@ function switchitup(toggle) {
 function handleChecked() {
     page = 1;
     document.getElementById("body-root").className = "global-lit"
+    
+    // Force crosshair cursor on all elements
+    document.documentElement.style.cursor = "url('crosshair.png') 15 15, auto";
+    document.body.style.cursor = "url('crosshair.png') 15 15, auto";
+    
     document.getElementById("theme-song").play()
     document.getElementById("headshot").src = "headshot_deepfried.jpg"
     let headshoutBounds = document.getElementById("headshot").getBoundingClientRect();
@@ -43,6 +48,11 @@ function handleChecked() {
 function handleUnchecked() {
     page = 0;
     document.getElementById("body-root").className = "global-regular"
+    
+    // Reset cursor to default
+    document.documentElement.style.cursor = "";
+    document.body.style.cursor = "";
+    
     document.getElementById("theme-song").pause();
     document.getElementById("headshot").src = "headshot.png"
     bugs.forEach(bug => {

@@ -6,10 +6,27 @@
 .global-lit {
     background-color: #F5A92B;
     height: 100vh;
-    cursor: url("crosshair.png") 15 15, auto;
     touch-action: manipulation;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
+}
+
+.global-lit,
+.global-lit *,
+.global-lit *:hover,
+.global-lit *:focus,
+.global-lit *:active {
+    cursor: url("crosshair.png") 15 15, auto !important;
+}
+
+/* Force crosshair on body when in game mode */
+body.global-lit {
+    cursor: url("crosshair.png") 15 15, auto !important;
+}
+
+/* Force crosshair on html element when in game mode */
+html:has(body.global-lit) {
+    cursor: url("crosshair.png") 15 15, auto !important;
 }
 
 .global-regular {
@@ -187,7 +204,16 @@ ul li {
     margin-top:10px;
 }
 
-/* Toggle Switch */
+/* Toggle Switch - Override crosshair for usability */
+.switch,
+.switch *,
+.slider,
+.slider *,
+#toggle-container,
+#toggle-container * {
+    cursor: pointer !important;
+}
+
 .switch {
     position: relative;
     display: inline-block;
@@ -216,7 +242,7 @@ ul li {
   /* The slider */
   .slider {
     position: absolute;
-    cursor: pointer;
+    cursor: pointer !important;
     top: 0;
     left: 0;
     right: 0;
