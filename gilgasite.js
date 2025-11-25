@@ -278,8 +278,7 @@ function handleShoot(event) {
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const shootCooldown = isMobile ? 150 : 50;
     if (page && Date.now() - lastAddedOrange > shootCooldown) {
-        // Prevent default touch behaviors
-        event.preventDefault();
+        // Don't prevent default to allow scrolling
         
         // Update start position to ensure accuracy
         updateStartPos();
@@ -319,4 +318,4 @@ function handleShoot(event) {
 
 // Add both mouse and touch event listeners
 window.addEventListener('mousedown', handleShoot);
-window.addEventListener('touchstart', handleShoot, { passive: false });
+window.addEventListener('touchstart', handleShoot, { passive: true }); // Allow scrolling
