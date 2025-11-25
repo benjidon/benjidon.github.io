@@ -6,7 +6,7 @@
 .global-lit {
     background-color: #F5A92B;
     height: 100vh;
-    touch-action: manipulation;
+    touch-action: pan-y; /* Allow vertical scrolling on mobile */
     -webkit-touch-callout: none;
     -webkit-user-select: none;
 }

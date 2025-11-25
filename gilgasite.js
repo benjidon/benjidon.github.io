@@ -97,6 +97,9 @@ function detectCollision(bb1, bb2) {
 }
 
 function handleOranges(dt) {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const orangeSpeed = isMobile ? speed * 0.6 : speed; // Slower on mobile
+    
     oranges.forEach((orange, index) => {
         let orangeElement = document.getElementById(orange.id)
         for (let i = 0; i < bugs.length; i++) {
@@ -118,8 +121,8 @@ function handleOranges(dt) {
             orangeElement.remove();
             oranges.splice(index, 1)
         } else {
-            orange.position.x += orange.dir.x * speed * dt
-            orange.position.y += orange.dir.y * speed * dt
+            orange.position.x += orange.dir.x * orangeSpeed * dt
+            orange.position.y += orange.dir.y * orangeSpeed * dt
             orangeElement.style.left = (orange.position.x - 25).toString() + "px"
             orangeElement.style.top = (orange.position.y - 25).toString() + "px"
         }
@@ -127,6 +130,9 @@ function handleOranges(dt) {
 }
 
 function handleBugs(dt) {
+    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const mobileBugSpeed = isMobile ? bugSpeed * 0.5 : bugSpeed; // Slower on mobile
+    
     bugs.forEach((bug, index) => {
         let bugElement = document.getElementById(bug.id)
 
@@ -155,15 +161,15 @@ function handleBugs(dt) {
                     bug.inBounds = true;
                 }
             }
-            bug.position.x += bug.dir.x * bugSpeed * dt
-            bug.position.y += bug.dir.y * bugSpeed * dt
+            bug.position.x += bug.dir.x * mobileBugSpeed * dt
+            bug.position.y += bug.dir.y * mobileBugSpeed * dt
             
             bugElement.style.left = (bug.position.x - 25).toString() + "px"
             bugElement.style.top = (bug.position.y - 25).toString() + "px"
             if (bug.attached !== undefined) {
                 let boundBox = buggables[bug.attached].getBoundingClientRect();
-                buggables[bug.attached].style.left = (boundBox.left + (bug.dir.x * bugSpeed * dt)).toString() + "px"
-                buggables[bug.attached].style.top = (boundBox.top + (bug.dir.y * bugSpeed * dt)).toString() + "px"
+                buggables[bug.attached].style.left = (boundBox.left + (bug.dir.x * mobileBugSpeed * dt)).toString() + "px"
+                buggables[bug.attached].style.top = (boundBox.top + (bug.dir.y * mobileBugSpeed * dt)).toString() + "px"
             }
         }
     })
