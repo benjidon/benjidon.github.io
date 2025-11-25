@@ -42,6 +42,10 @@ function handleChecked() {
     document.getElementById('body-root').style.userSelect = "none"
     document.getElementById("try-me").style.display = "none"
     document.getElementById("bug-attack").style.display = "block"
+    
+    // Add touch event listener only when game is active
+    window.addEventListener('touchstart', handleShoot, { passive: true });
+    
     gameLoop();
 }
 
@@ -60,6 +64,10 @@ function handleUnchecked() {
     })
     document.getElementById('body-root').style.userSelect = "auto"
     document.getElementById("bug-attack").style.display = "none"
+    
+    // Remove touch event listener when game is inactive
+    window.removeEventListener('touchstart', handleShoot);
+    
     cleanup()
 }
 
@@ -274,10 +282,17 @@ function handleShoot(event) {
     if (parent && parent.id === "page-switch") {
         return;
     }
+    
+    // Only handle shooting if game is active
+    if (!page) {
+        return;
+    }
+    
     // Slower shooting on mobile to reduce performance load
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
     const shootCooldown = isMobile ? 150 : 50;
-    if (page && Date.now() - lastAddedOrange > shootCooldown) {
+    
+    if (Date.now() - lastAddedOrange > shootCooldown) {
         // Don't prevent default to allow scrolling
         
         // Update start position to ensure accuracy
@@ -316,6 +331,7 @@ function handleShoot(event) {
     }
 }
 
-// Add both mouse and touch event listeners
+// Add mouse event listener (always active)
 window.addEventListener('mousedown', handleShoot);
-window.addEventListener('touchstart', handleShoot, { passive: true }); // Allow scrolling
+
+// Touch event listener will be added/removed when game starts/stops
