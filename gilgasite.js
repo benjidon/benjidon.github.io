@@ -27,9 +27,10 @@ function handleChecked() {
     page = 1;
     document.getElementById("body-root").className = "global-lit"
     
-    // Force crosshair cursor on all elements
-    document.documentElement.style.cursor = "url('crosshair.png') 15 15, auto";
-    document.body.style.cursor = "url('crosshair.png') 15 15, auto";
+    // Force crosshair cursor on all elements (red scope-style crosshair)
+    const redScope = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' stroke='%23ff0000' stroke-width='2' fill='none'/%3E%3Cline x1='16' y1='0' x2='16' y2='6' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='16' y1='26' x2='16' y2='32' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='0' y1='16' x2='6' y2='16' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='26' y1='16' x2='32' y2='16' stroke='%23ff0000' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ff0000'/%3E%3C/svg%3E\") 16 16, crosshair";
+    document.documentElement.style.cursor = redScope;
+    document.body.style.cursor = redScope;
     
     // Pre-cache and configure audio elements
     shootSound = document.getElementById("shoot-orange");
