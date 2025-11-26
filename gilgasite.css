@@ -165,6 +165,67 @@
     box-shadow: 0 0 12px #00ff41, 0 0 24px #00ff4188;
 }
 
+/* 8-bit explosion effect */
+.explosion {
+    position: fixed;
+    pointer-events: none;
+    z-index: 50;
+    width: 60px;
+    height: 60px;
+}
+
+.explosion-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    left: 26px;
+    top: 26px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.explosion-particle.p1 { background: #ff0000; animation: explode-1 0.35s ease-out forwards; }
+.explosion-particle.p2 { background: #ff6600; animation: explode-2 0.35s ease-out forwards; }
+.explosion-particle.p3 { background: #ffff00; animation: explode-3 0.35s ease-out forwards; }
+.explosion-particle.p4 { background: #ffffff; animation: explode-4 0.35s ease-out forwards; }
+.explosion-particle.p5 { background: #ff3300; animation: explode-5 0.35s ease-out forwards; }
+.explosion-particle.p6 { background: #ff9900; animation: explode-6 0.35s ease-out forwards; }
+.explosion-particle.p7 { background: #ffcc00; animation: explode-7 0.35s ease-out forwards; }
+.explosion-particle.p8 { background: #ff0000; animation: explode-8 0.35s ease-out forwards; }
+
+@keyframes explode-1 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(-25px, -30px) scale(0.5); opacity: 0; }
+}
+@keyframes explode-2 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(0, -35px) scale(0.5); opacity: 0; }
+}
+@keyframes explode-3 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(25px, -30px) scale(0.5); opacity: 0; }
+}
+@keyframes explode-4 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(-35px, 0) scale(0.5); opacity: 0; }
+}
+@keyframes explode-5 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(35px, 0) scale(0.5); opacity: 0; }
+}
+@keyframes explode-6 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(-25px, 30px) scale(0.5); opacity: 0; }
+}
+@keyframes explode-7 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(0, 35px) scale(0.5); opacity: 0; }
+}
+@keyframes explode-8 {
+    0% { transform: translate(0, 0) scale(1.5); opacity: 1; }
+    100% { transform: translate(25px, 30px) scale(0.5); opacity: 0; }
+}
+
 .global-lit,
 .global-lit *,
 .global-lit *:hover,

@@ -127,6 +127,27 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function createExplosion(x, y) {
+    const explosion = document.createElement('div');
+    explosion.className = 'explosion';
+    explosion.style.left = (x - 30) + 'px';
+    explosion.style.top = (y - 30) + 'px';
+    
+    // Create 8 particles flying outward in 8 directions
+    for (let i = 1; i <= 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = `explosion-particle p${i}`;
+        explosion.appendChild(particle);
+    }
+    
+    document.body.appendChild(explosion);
+    
+    // Remove explosion after animation completes
+    setTimeout(() => {
+        explosion.remove();
+    }, 400);
+}
+
 function cleanup() {
     oranges.forEach(orange => {
         document.getElementById(orange.id).remove();
@@ -179,6 +200,11 @@ function handleOranges(dt) {
             let bug = bugs[i]
             let bugElement = document.getElementById(bug.id);
             if (detectCollision(bugElement.getBoundingClientRect(), orangeElement.getBoundingClientRect())) {
+                // Get bug position for explosion before removing
+                const bugRect = bugElement.getBoundingClientRect();
+                const explosionX = bugRect.left + bugRect.width / 2;
+                const explosionY = bugRect.top + bugRect.height / 2;
+                
                 orangeElement.remove();
                 oranges.splice(index, 1)
                 bugElement.remove();
@@ -187,6 +213,9 @@ function handleOranges(dt) {
                     // Text is already in document coordinates, just leave it in place
                     buggableCollided[bug.attached] = undefined;
                 }
+                
+                // Create 8-bit explosion effect
+                createExplosion(explosionX, explosionY);
                 
                 // Update bug score
                 bugScore++;
