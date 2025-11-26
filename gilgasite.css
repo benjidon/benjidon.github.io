@@ -113,6 +113,20 @@
     border-bottom-color: #00ff41 !important;
 }
 
+/* Green toggle slider when game is active */
+.global-lit .slider {
+    background-color: #003311 !important;
+    border: 2px solid #00ff41 !important;
+    box-shadow: 0 0 12px #00ff41, 0 0 24px #00ff4188 !important;
+}
+
+.global-lit .slider:before {
+    background-color: #00ff41 !important;
+    box-shadow: none !important;
+    left: 2px !important;
+    bottom: 2px !important;
+}
+
 .global-lit,
 .global-lit *,
 .global-lit *:hover,
