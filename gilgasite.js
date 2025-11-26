@@ -234,8 +234,8 @@ function handleOranges(dt) {
         } else {
             orange.position.x += orange.dir.x * orangeSpeed * dt
             orange.position.y += orange.dir.y * orangeSpeed * dt
-            orangeElement.style.left = (orange.position.x - 25).toString() + "px"
-            orangeElement.style.top = (orange.position.y - 25).toString() + "px"
+            orangeElement.style.left = (orange.position.x - 12).toString() + "px"
+            orangeElement.style.top = (orange.position.y - 12).toString() + "px"
         }
     })
 }
@@ -439,12 +439,12 @@ function handleShoot(event) {
         let newOrangeId = "orange_" + nextOrange.toString()
         const newOrange = { id: newOrangeId, dir: dirVector, position: { ...startPos } }
         oranges.push(newOrange);
-        const orangeElement = document.createElement("img")
-        orangeElement.src = "orange_art_2.png"
+        const orangeElement = document.createElement("div")
+        orangeElement.className = "energy-orb"
         orangeElement.id = newOrangeId
-        orangeElement.style = "position: fixed;"
-        orangeElement.style.left = (startPos.x - 25).toString() + "px";
-        orangeElement.style.top = (startPos.y - 25).toString() + "px";
+        orangeElement.style.position = "fixed"
+        orangeElement.style.left = (startPos.x - 12).toString() + "px";
+        orangeElement.style.top = (startPos.y - 12).toString() + "px";
         orangeElement.style.userSelect = "none"
         document.body.appendChild(orangeElement)
         // Play shoot sound with optimized cached element

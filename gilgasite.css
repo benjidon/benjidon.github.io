@@ -226,6 +226,96 @@
     100% { transform: translate(25px, 30px) scale(0.5); opacity: 0; }
 }
 
+/* Energy Orb Projectile - Electric Plasma Style */
+.energy-orb {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 40%, 
+        #ffffff 0%, 
+        #ffffff 20%,
+        #aaeeff 35%, 
+        #44ddff 50%, 
+        #00aaff 70%,
+        #0066cc 100%);
+    box-shadow: 
+        0 0 4px #ffffff,
+        0 0 8px #aaeeff,
+        0 0 15px #00ccff,
+        0 0 25px #0088ffaa,
+        0 0 35px #0044aa66;
+    animation: plasma-pulse 0.08s ease-in-out infinite alternate;
+    pointer-events: none;
+    position: relative;
+}
+
+/* Electric sparks around the orb */
+.energy-orb::before,
+.energy-orb::after {
+    content: '';
+    position: absolute;
+    border-radius: 50%;
+    background: transparent;
+    pointer-events: none;
+}
+
+/* Outer electric ring */
+.energy-orb::before {
+    width: 32px;
+    height: 32px;
+    top: -6px;
+    left: -6px;
+    border: 2px solid transparent;
+    border-top-color: #aaeeff;
+    border-right-color: #00ccff;
+    animation: spark-spin 0.12s linear infinite;
+    opacity: 0.9;
+}
+
+/* Inner buzzing ring */
+.energy-orb::after {
+    width: 28px;
+    height: 28px;
+    top: -4px;
+    left: -4px;
+    border: 1px solid transparent;
+    border-bottom-color: #ffffff;
+    border-left-color: #44ddff;
+    animation: spark-spin-reverse 0.1s linear infinite;
+    opacity: 0.8;
+}
+
+@keyframes plasma-pulse {
+    0% {
+        box-shadow: 
+            0 0 3px #ffffff,
+            0 0 6px #aaeeff,
+            0 0 12px #00ccff,
+            0 0 20px #0088ff99,
+            0 0 30px #0044aa55;
+        transform: scale(0.92);
+    }
+    100% {
+        box-shadow: 
+            0 0 6px #ffffff,
+            0 0 12px #ccffff,
+            0 0 20px #00eeff,
+            0 0 30px #00aaffbb,
+            0 0 40px #0066aa77;
+        transform: scale(1.08);
+    }
+}
+
+@keyframes spark-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes spark-spin-reverse {
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
+}
+
 .global-lit,
 .global-lit *,
 .global-lit *:hover,
