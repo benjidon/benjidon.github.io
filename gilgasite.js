@@ -15,6 +15,31 @@ let addBugTime = 3000
 let shootSound = null;
 let hitSound = null;
 
+// Bug score tracking
+let bugScore = 0;
+
+// Music state
+let musicEnabled = false;
+
+function toggleMusic() {
+    musicEnabled = !musicEnabled;
+    const themeSong = document.getElementById("theme-song");
+    const btn = document.getElementById("music-toggle-btn");
+    const iconOff = document.getElementById("music-icon-off");
+    const iconOn = document.getElementById("music-icon-on");
+    
+    if (musicEnabled) {
+        themeSong.play();
+        btn.classList.add("music-on");
+        iconOff.style.display = "none";
+        iconOn.style.display = "block";
+    } else {
+        themeSong.pause();
+        btn.classList.remove("music-on");
+        iconOff.style.display = "block";
+        iconOn.style.display = "none";
+    }
+}
 
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
@@ -24,9 +49,10 @@ function handleChecked() {
     page = 1;
     document.getElementById("body-root").className = "global-lit"
     
-    // Force crosshair cursor on all elements
-    document.documentElement.style.cursor = "url('crosshair.png') 15 15, auto";
-    document.body.style.cursor = "url('crosshair.png') 15 15, auto";
+    // Force crosshair cursor on all elements (red scope-style crosshair)
+    const redScope = "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' stroke='%23ff0000' stroke-width='2' fill='none'/%3E%3Cline x1='16' y1='0' x2='16' y2='6' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='16' y1='26' x2='16' y2='32' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='0' y1='16' x2='6' y2='16' stroke='%23ff0000' stroke-width='2'/%3E%3Cline x1='26' y1='16' x2='32' y2='16' stroke='%23ff0000' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='2' fill='%23ff0000'/%3E%3C/svg%3E\") 16 16, crosshair";
+    document.documentElement.style.cursor = redScope;
+    document.body.style.cursor = redScope;
     
     // Pre-cache and configure audio elements
     shootSound = document.getElementById("shoot-orange");
@@ -34,7 +60,13 @@ function handleChecked() {
     shootSound.volume = 0.6;
     hitSound.volume = 0.6;
     
-    document.getElementById("theme-song").play()
+    // Show music toggle button (music defaults to off)
+    document.getElementById("music-toggle-btn").style.display = "flex";
+    
+    // Only play music if toggle is on
+    if (musicEnabled) {
+        document.getElementById("theme-song").play();
+    }
     document.getElementById("headshot").src = "headshot_deepfried.jpg"
     let headshoutBounds = document.getElementById("headshot").getBoundingClientRect();
     let width = headshoutBounds.right - headshoutBounds.left;
@@ -52,6 +84,10 @@ function handleChecked() {
     document.getElementById('body-root').style.userSelect = "none"
     document.getElementById("try-me").style.display = "none"
     document.getElementById("bug-attack").style.display = "block"
+    document.getElementById("bug-score").style.display = "block"
+    
+    // Show current score (don't reset)
+    document.getElementById("score-value").textContent = bugScore;
     
     // Add touch event listener only when game is active
     window.addEventListener('touchstart', handleShoot, { passive: true });
@@ -68,12 +104,14 @@ function handleUnchecked() {
     document.body.style.cursor = "";
     
     document.getElementById("theme-song").pause();
+    document.getElementById("music-toggle-btn").style.display = "none";
     document.getElementById("headshot").src = "headshot.png"
     bugs.forEach(bug => {
         document.getElementById(bug.id).style.display = "none"
     })
     document.getElementById('body-root').style.userSelect = "auto"
     document.getElementById("bug-attack").style.display = "none"
+    document.getElementById("bug-score").style.display = "none"
     
     // Remove touch event listener when game is inactive
     window.removeEventListener('touchstart', handleShoot);
@@ -87,6 +125,27 @@ function handleUnchecked() {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function createExplosion(x, y) {
+    const explosion = document.createElement('div');
+    explosion.className = 'explosion';
+    explosion.style.left = (x - 30) + 'px';
+    explosion.style.top = (y - 30) + 'px';
+    
+    // Create 8 particles flying outward in 8 directions
+    for (let i = 1; i <= 8; i++) {
+        const particle = document.createElement('div');
+        particle.className = `explosion-particle p${i}`;
+        explosion.appendChild(particle);
+    }
+    
+    document.body.appendChild(explosion);
+    
+    // Remove explosion after animation completes
+    setTimeout(() => {
+        explosion.remove();
+    }, 400);
 }
 
 function cleanup() {
@@ -141,6 +200,11 @@ function handleOranges(dt) {
             let bug = bugs[i]
             let bugElement = document.getElementById(bug.id);
             if (detectCollision(bugElement.getBoundingClientRect(), orangeElement.getBoundingClientRect())) {
+                // Get bug position for explosion before removing
+                const bugRect = bugElement.getBoundingClientRect();
+                const explosionX = bugRect.left + bugRect.width / 2;
+                const explosionY = bugRect.top + bugRect.height / 2;
+                
                 orangeElement.remove();
                 oranges.splice(index, 1)
                 bugElement.remove();
@@ -149,6 +213,14 @@ function handleOranges(dt) {
                     // Text is already in document coordinates, just leave it in place
                     buggableCollided[bug.attached] = undefined;
                 }
+                
+                // Create 8-bit explosion effect
+                createExplosion(explosionX, explosionY);
+                
+                // Update bug score
+                bugScore++;
+                document.getElementById("score-value").textContent = bugScore;
+                
                 // Play hit sound with optimized cached element
                 if (hitSound) {
                     hitSound.currentTime = 0; // Reset to start for rapid fire
@@ -162,8 +234,8 @@ function handleOranges(dt) {
         } else {
             orange.position.x += orange.dir.x * orangeSpeed * dt
             orange.position.y += orange.dir.y * orangeSpeed * dt
-            orangeElement.style.left = (orange.position.x - 25).toString() + "px"
-            orangeElement.style.top = (orange.position.y - 25).toString() + "px"
+            orangeElement.style.left = (orange.position.x - 12).toString() + "px"
+            orangeElement.style.top = (orange.position.y - 12).toString() + "px"
         }
     })
 }
@@ -318,8 +390,20 @@ function updateStartPos() {
 window.addEventListener('scroll', updateStartPos);
 
 function handleShoot(event) {
-    const parent = event.target.parentElement;
+    // Don't shoot when clicking on toggles
+    const target = event.target;
+    const parent = target.parentElement;
+    const grandparent = parent ? parent.parentElement : null;
+    
+    // Check if clicking on game toggle
     if (parent && parent.id === "page-switch") {
+        return;
+    }
+    
+    // Check if clicking on music toggle button or its children (SVG icons)
+    if (target.id === "music-toggle-btn" || 
+        parent && parent.id === "music-toggle-btn" ||
+        grandparent && grandparent.id === "music-toggle-btn") {
         return;
     }
     
@@ -355,12 +439,12 @@ function handleShoot(event) {
         let newOrangeId = "orange_" + nextOrange.toString()
         const newOrange = { id: newOrangeId, dir: dirVector, position: { ...startPos } }
         oranges.push(newOrange);
-        const orangeElement = document.createElement("img")
-        orangeElement.src = "orange_art_2.png"
+        const orangeElement = document.createElement("div")
+        orangeElement.className = "energy-orb"
         orangeElement.id = newOrangeId
-        orangeElement.style = "position: fixed;"
-        orangeElement.style.left = (startPos.x - 25).toString() + "px";
-        orangeElement.style.top = (startPos.y - 25).toString() + "px";
+        orangeElement.style.position = "fixed"
+        orangeElement.style.left = (startPos.x - 12).toString() + "px";
+        orangeElement.style.top = (startPos.y - 12).toString() + "px";
         orangeElement.style.userSelect = "none"
         document.body.appendChild(orangeElement)
         // Play shoot sound with optimized cached element
