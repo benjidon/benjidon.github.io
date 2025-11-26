@@ -30,6 +30,19 @@
             <div id="try-me" class="body-header-font wave-text" style="margin-right: 15px; color: red; white-space: nowrap;">
                 <span>T</span><span>r</span><span>y</span><span>&nbsp;</span><span>M</span><span>e</span><span> </span><span>-</span><span>></span>
             </div>
+            <!-- Music Toggle Button (hidden by default) -->
+            <button id="music-toggle-btn" onclick="toggleMusic()" style="display: none;">
+                <svg id="music-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                    <line x1="23" y1="9" x2="17" y2="15"/>
+                    <line x1="17" y1="9" x2="23" y2="15"/>
+                </svg>
+                <svg id="music-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+                    <path d="M11 5L6 9H2v6h4l5 4V5z"/>
+                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+                    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+                </svg>
+            </button>
             <label id="page-switch" class="switch">
                 <input type="checkbox" onclick="switchitup(this)">
                 <span class="slider round"></span>

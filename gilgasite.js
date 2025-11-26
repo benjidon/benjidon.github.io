@@ -18,6 +18,28 @@ let hitSound = null;
 // Bug score tracking
 let bugScore = 0;
 
+// Music state
+let musicEnabled = false;
+
+function toggleMusic() {
+    musicEnabled = !musicEnabled;
+    const themeSong = document.getElementById("theme-song");
+    const btn = document.getElementById("music-toggle-btn");
+    const iconOff = document.getElementById("music-icon-off");
+    const iconOn = document.getElementById("music-icon-on");
+    
+    if (musicEnabled) {
+        themeSong.play();
+        btn.classList.add("music-on");
+        iconOff.style.display = "none";
+        iconOn.style.display = "block";
+    } else {
+        themeSong.pause();
+        btn.classList.remove("music-on");
+        iconOff.style.display = "block";
+        iconOn.style.display = "none";
+    }
+}
 
 function switchitup(toggle) {
     toggle.checked ? handleChecked() : handleUnchecked();
@@ -38,7 +60,13 @@ function handleChecked() {
     shootSound.volume = 0.6;
     hitSound.volume = 0.6;
     
-    document.getElementById("theme-song").play()
+    // Show music toggle button (music defaults to off)
+    document.getElementById("music-toggle-btn").style.display = "flex";
+    
+    // Only play music if toggle is on
+    if (musicEnabled) {
+        document.getElementById("theme-song").play();
+    }
     document.getElementById("headshot").src = "headshot_deepfried.jpg"
     let headshoutBounds = document.getElementById("headshot").getBoundingClientRect();
     let width = headshoutBounds.right - headshoutBounds.left;
@@ -76,6 +104,7 @@ function handleUnchecked() {
     document.body.style.cursor = "";
     
     document.getElementById("theme-song").pause();
+    document.getElementById("music-toggle-btn").style.display = "none";
     document.getElementById("headshot").src = "headshot.png"
     bugs.forEach(bug => {
         document.getElementById(bug.id).style.display = "none"
@@ -332,8 +361,20 @@ function updateStartPos() {
 window.addEventListener('scroll', updateStartPos);
 
 function handleShoot(event) {
-    const parent = event.target.parentElement;
+    // Don't shoot when clicking on toggles
+    const target = event.target;
+    const parent = target.parentElement;
+    const grandparent = parent ? parent.parentElement : null;
+    
+    // Check if clicking on game toggle
     if (parent && parent.id === "page-switch") {
+        return;
+    }
+    
+    // Check if clicking on music toggle button or its children (SVG icons)
+    if (target.id === "music-toggle-btn" || 
+        parent && parent.id === "music-toggle-btn" ||
+        grandparent && grandparent.id === "music-toggle-btn") {
         return;
     }
     

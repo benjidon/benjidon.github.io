@@ -127,6 +127,44 @@
     bottom: 2px !important;
 }
 
+/* Music toggle button */
+#music-toggle-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #00ff41;
+    background: rgba(0, 51, 17, 0.8);
+    color: #00ff41;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    margin-right: 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 0 10px #00ff4166, 0 0 20px #00ff4133;
+}
+
+#music-toggle-btn:hover {
+    background: rgba(0, 80, 25, 0.9);
+    box-shadow: 0 0 15px #00ff4188, 0 0 30px #00ff4155;
+    transform: scale(1.05);
+}
+
+#music-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+#music-toggle-btn svg {
+    width: 18px;
+    height: 18px;
+}
+
+#music-toggle-btn.music-on {
+    background: rgba(0, 100, 30, 0.9);
+    box-shadow: 0 0 12px #00ff41, 0 0 24px #00ff4188;
+}
+
 .global-lit,
 .global-lit *,
 .global-lit *:hover,
