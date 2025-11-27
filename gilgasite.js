@@ -155,18 +155,22 @@ function cleanup() {
     oranges = [];
     nextOrange = 0;
     
-    // Reset all buggable elements to their original state
-    if (buggables) {
-        for (let i = 0; i < buggables.length; i++) {
-            if (buggableCollided[i] !== undefined) {
-                buggables[i].style.position = "";
-                buggables[i].style.left = "";
-                buggables[i].style.top = "";
-                buggables[i].style.float = "";
-            }
+    // Don't reset buggable positions - text stays where bugs dragged it
+    // Just clear the collision tracking for bugs that were removed
+    bugs.forEach(bug => {
+        if (bug.attached !== undefined) {
+            buggableCollided[bug.attached] = undefined;
         }
-    }
-    buggableCollided = {};
+    });
+    
+    bugs.forEach(bug => {
+        const bugElement = document.getElementById(bug.id);
+        if (bugElement) {
+            bugElement.remove();
+        }
+    });
+    bugs = [];
+    nextBug = 0;
 }
 
 function isOutOfBounds(element) {
@@ -310,7 +314,7 @@ async function gameLoop() {
             addBug()
             bugTimer = 0
         }
-        if (overallTime > 5000 && addBugTime > 1500) {
+        if (overallTime > 5000 && addBugTime > 750) {
             addBugTime *= 0.8
         }
         
